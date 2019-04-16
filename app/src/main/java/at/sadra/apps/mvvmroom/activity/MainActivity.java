@@ -1,6 +1,7 @@
-package at.sadra.apps.mvvmroom;
+package at.sadra.apps.mvvmroom.activity;
 
 import androidx.appcompat.app.AppCompatActivity;
+import at.sadra.apps.mvvmroom.R;
 
 import android.os.Bundle;
 
