@@ -1,4 +1,4 @@
-package at.sadra.apps.mvvmroom.dao;
+package at.sadra.apps.mvvmroom.room;
 
 import java.util.List;
 
