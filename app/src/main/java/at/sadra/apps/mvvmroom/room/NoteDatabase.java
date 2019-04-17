@@ -1,10 +1,13 @@
 package at.sadra.apps.mvvmroom.room;
 
 import android.content.Context;
+import android.os.AsyncTask;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 import at.sadra.apps.mvvmroom.model.Note;
 
 @Database(entities = {Note.class}, version = 1)
@@ -20,8 +23,33 @@ public abstract class NoteDatabase extends RoomDatabase {
                     NoteDatabase.class,
                     "note_database")
                     .fallbackToDestructiveMigration()
+                    .addCallback(roomCallback) // related to code below
                     .build();
         }
         return instance;
+    }
+
+    // This code to Add one Note in first time run.
+    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback(){
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            new PopulateDbAsyncTask(instance).execute();
+        }
+    };
+
+    private static class PopulateDbAsyncTask extends AsyncTask<Void, Void,Void>{
+
+        private NoteDao noteDao;
+
+        private PopulateDbAsyncTask(NoteDatabase database) {
+            this.noteDao = database.noteDao();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            noteDao.insert(new Note("Title","description",1));
+            return null;
+        }
     }
 }
