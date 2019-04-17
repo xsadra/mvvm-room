@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/note_item_margin"
+    android:layout_marginStart="@dimen/note_item_margin"
+    android:layout_marginEnd="@dimen/note_item_margin">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/note_item_padding">
+
+        <TextView
+            android:id="@+id/note_item_text_view_priority"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:text="@string/sample_number"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"/>
+
+        <TextView
+            android:id="@+id/note_item_text_view_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/sample_text"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+            android:maxLines="1"
+            android:layout_toStartOf="@id/note_item_text_view_priority"
+            android:layout_alignParentStart="true"
+            android:ellipsize="end"
+            />
+
+        <TextView
+            android:id="@+id/note_item_text_view_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/note_item_text_view_title"
+            android:text="@string/sample_text"
+            />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
