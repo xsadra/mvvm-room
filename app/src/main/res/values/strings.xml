@@ -2,4 +2,8 @@
     <string name="app_name">Mvvm Room</string>
     <string name="sample_text">Sample Text</string>
     <string name="sample_number">10</string>
+    <string name="add_note_title">Title</string>
+    <string name="add_note_description">Description</string>
+    <string name="add_note_priority_title">Priority:</string>
+    <string name="add_note_menu_item_save">Save</string>
 </resources>
