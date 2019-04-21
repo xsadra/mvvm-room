@@ -35,6 +35,7 @@ public class App {
         public static final String ON_CHANGED = "onChanged";
         public static final String NOTE_SAVED = "Note saved!";
         public static final String NOTE_NOT_SAVED = "Note not Saved!";
+        public static final String NOTE_DELETED = "Note Deleted!";
     }
 
     public static class Error {

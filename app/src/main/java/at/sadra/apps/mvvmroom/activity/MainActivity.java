@@ -5,15 +5,15 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.picker.DaysHeaderAdapter;
 
 import java.util.List;
-import java.util.Objects;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import at.sadra.apps.mvvmroom.R;
@@ -22,7 +22,9 @@ import at.sadra.apps.mvvmroom.app.App;
 import at.sadra.apps.mvvmroom.model.Note;
 import at.sadra.apps.mvvmroom.viewmodel.NoteViewModel;
 
-import static at.sadra.apps.mvvmroom.app.App.Tag.*;
+import static at.sadra.apps.mvvmroom.app.App.Tag.EXTRA_DESCRIPTION;
+import static at.sadra.apps.mvvmroom.app.App.Tag.EXTRA_PRIORITY;
+import static at.sadra.apps.mvvmroom.app.App.Tag.EXTRA_TITLE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,17 +32,30 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState );
+        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setTitle(App.Strings.APP_TITLE);
-        initialize();
 
+        initializeFab();
+
+        initializeRecyclerView();
+    }
+
+    private void initializeFab() {
+        FloatingActionButton fabAddNote = findViewById(R.id.fab_add_note);
+        fabAddNote.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, AddNoteActivity.class);
+                startActivityForResult(intent, App.Tag.ADD_NOTE_REQUEST);
+            }
+        });
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode != App.Tag.ADD_NOTE_REQUEST || resultCode != RESULT_OK){
+        if (requestCode != App.Tag.ADD_NOTE_REQUEST || resultCode != RESULT_OK) {
             App.toast(this, App.Message.NOTE_NOT_SAVED);
             return;
         }
@@ -54,17 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void initialize() {
-
-        FloatingActionButton fabAddNote = findViewById(R.id.fab_add_note);
-        fabAddNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, AddNoteActivity.class);
-                startActivityForResult(intent, App.Tag.ADD_NOTE_REQUEST);
-            }
-        });
-
+    private void initializeRecyclerView() {
         RecyclerView noteRecyclerView = findViewById(R.id.note_recycler_view);
         noteRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         noteRecyclerView.setHasFixedSize(true);
@@ -79,5 +84,21 @@ public class MainActivity extends AppCompatActivity {
                 adapter.setNotes(notes);
             }
         });
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                int position = viewHolder.getAdapterPosition();
+                Note currentNote = adapter.getNoteAt(position);
+                noteViewModel.delete(currentNote);
+                App.toast(MainActivity.this, App.Message.NOTE_DELETED);
+            }
+        }).attachToRecyclerView(noteRecyclerView);
     }
 }
