@@ -36,6 +36,7 @@ public class App {
         public static final String NOTE_SAVED = "Note saved!";
         public static final String NOTE_NOT_SAVED = "Note not Saved!";
         public static final String NOTE_DELETED = "Note Deleted!";
+        public static final String ALL_NOTES_DELETED = "All Notes Deleted!";
     }
 
     public static class Error {
