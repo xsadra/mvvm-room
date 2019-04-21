@@ -1,12 +1,10 @@
 package at.sadra.apps.mvvmroom.adapter;
 
 import android.view.LayoutInflater;
-import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +16,7 @@ import at.sadra.apps.mvvmroom.model.Note;
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
 
     private List<Note> notes = new ArrayList<>();
+    private onItemClickListener listener;
 
     @NonNull
     @Override
@@ -42,15 +41,22 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         return notes.size();
     }
 
-
     public void setNotes(List<Note> notes) {
         this.notes = notes;
         // Change it Later...
         notifyDataSetChanged();
     }
 
-    public Note getNoteAt(int position){
+    public Note getNoteAt(int position) {
         return notes.get(position);
+    }
+
+    public void setOnItemClickListener(onItemClickListener listener) {
+        this.listener = listener;
+    }
+
+    public interface onItemClickListener {
+        void onItemClick(Note note);
     }
 
     class NoteHolder extends RecyclerView.ViewHolder {
@@ -63,6 +69,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
             title = itemView.findViewById(R.id.note_item_text_view_title);
             description = itemView.findViewById(R.id.note_item_text_view_description);
             priority = itemView.findViewById(R.id.note_item_text_view_priority);
+
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener == null || position == RecyclerView.NO_POSITION){
+                        return;
+                    }
+                    Note currentNote = notes.get(position);
+                    listener.onItemClick(currentNote);
+                }
+            });
         }
     }
 }

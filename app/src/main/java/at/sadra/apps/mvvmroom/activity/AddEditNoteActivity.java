@@ -12,9 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import at.sadra.apps.mvvmroom.R;
 import at.sadra.apps.mvvmroom.app.App;
 
+import static at.sadra.apps.mvvmroom.app.App.Error.*;
 import static at.sadra.apps.mvvmroom.app.App.Tag.*;
+import static at.sadra.apps.mvvmroom.app.App.Value.*;
 
-public class AddNoteActivity extends AppCompatActivity {
+public class AddEditNoteActivity extends AppCompatActivity {
 
     private TextView addNoteTitle;
     private TextView addNoteDescription;
@@ -51,8 +53,8 @@ public class AddNoteActivity extends AppCompatActivity {
         String description = addNoteDescription.getText().toString();
         int priority = addNotePriority.getValue();
 
-        if (title.trim().isEmpty() || description.trim().isEmpty()){
-            App.toast(AddNoteActivity.this,"Insert a title and a description!");
+        if (title.trim().isEmpty() || description.trim().isEmpty()) {
+            App.toast(AddEditNoteActivity.this, INSERT_TITLE_DESCRIPTION);
             return;
         }
 
@@ -60,6 +62,11 @@ public class AddNoteActivity extends AppCompatActivity {
         data.putExtra(EXTRA_TITLE, title);
         data.putExtra(EXTRA_DESCRIPTION, description);
         data.putExtra(EXTRA_PRIORITY, priority);
+
+        int id = getIntent().getIntExtra(EXTRA_ID, INVALID_ID);
+        if (id != INVALID_ID){
+            data.putExtra(EXTRA_ID, id);
+        }
 
         setResult(RESULT_OK, data);
         finish();
@@ -74,6 +81,15 @@ public class AddNoteActivity extends AppCompatActivity {
         addNotePriority.setMaxValue(10);
 
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close);
-        setTitle(App.Strings.ADD_NOTE_TITLE);
+
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_ID)) {
+            setTitle(EDIT_NOTE_TITLE);
+            addNoteTitle.setText(intent.getStringExtra(EXTRA_TITLE));
+            addNoteDescription.setText(intent.getStringExtra(EXTRA_DESCRIPTION));
+            addNotePriority.setValue(intent.getIntExtra(EXTRA_PRIORITY, PRIORITY_DEFAULT));
+        } else {
+            setTitle(ADD_NOTE_TITLE);
+        }
     }
 }
