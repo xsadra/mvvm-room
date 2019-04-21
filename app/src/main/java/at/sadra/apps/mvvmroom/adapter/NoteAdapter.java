@@ -1,10 +1,12 @@
 package at.sadra.apps.mvvmroom.adapter;
 
 import android.view.LayoutInflater;
+import android.view.PointerIcon;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.security.PublicKey;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,6 +47,10 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteHolder> {
         this.notes = notes;
         // Change it Later...
         notifyDataSetChanged();
+    }
+
+    public Note getNoteAt(int position){
+        return notes.get(position);
     }
 
     class NoteHolder extends RecyclerView.ViewHolder {
