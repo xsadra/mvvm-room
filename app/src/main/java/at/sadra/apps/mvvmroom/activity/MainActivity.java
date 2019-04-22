@@ -25,9 +25,14 @@ import at.sadra.apps.mvvmroom.app.App;
 import at.sadra.apps.mvvmroom.model.Note;
 import at.sadra.apps.mvvmroom.viewmodel.NoteViewModel;
 
-import static at.sadra.apps.mvvmroom.app.App.Tag.*;
 import static at.sadra.apps.mvvmroom.app.App.Error;
 import static at.sadra.apps.mvvmroom.app.App.Message;
+import static at.sadra.apps.mvvmroom.app.App.Tag.ADD_NOTE_REQUEST;
+import static at.sadra.apps.mvvmroom.app.App.Tag.EDIT_NOTE_REQUEST;
+import static at.sadra.apps.mvvmroom.app.App.Tag.EXTRA_DESCRIPTION;
+import static at.sadra.apps.mvvmroom.app.App.Tag.EXTRA_ID;
+import static at.sadra.apps.mvvmroom.app.App.Tag.EXTRA_PRIORITY;
+import static at.sadra.apps.mvvmroom.app.App.Tag.EXTRA_TITLE;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -73,9 +78,9 @@ public class MainActivity extends AppCompatActivity {
             App.toast(this, Message.NOTE_SAVED);
         }
 
-        if (requestCode == EDIT_NOTE_REQUEST){
+        if (requestCode == EDIT_NOTE_REQUEST) {
             int id = data.getIntExtra(EXTRA_ID, App.Value.INVALID_ID);
-            if (id == App.Value.INVALID_ID){
+            if (id == App.Value.INVALID_ID) {
                 App.toast(this, Error.NOTE_CANNOT_BE_UPDATED);
                 return;
             }
@@ -97,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         noteViewModel.getAllNote().observe(this, new Observer<List<Note>>() {
             @Override
             public void onChanged(List<Note> notes) {
-                adapter.setNotes(notes);
+                adapter.submitList(notes);
             }
         });
 
@@ -142,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.menu_delete_all_notes:
                 noteViewModel.deleteAllNotes();
-                App.toast(this,Message.ALL_NOTES_DELETED);
+                App.toast(this, Message.ALL_NOTES_DELETED);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
