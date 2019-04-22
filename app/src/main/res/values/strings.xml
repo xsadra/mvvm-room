@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Mvvm Room</string>
+    <string name="app_name">Note</string>
     <string name="sample_text">Sample Text</string>
     <string name="sample_number">10</string>
     <string name="add_note_title">Title</string>
